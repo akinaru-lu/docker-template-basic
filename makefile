@@ -1,7 +1,13 @@
-all: run
+all: start
 
-down:
-	cd docker && docker-compose down
+start:
+	docker-compose -f gateway/docker-compose.yml up -d
+	docker-compose -f app/docker-compose.yml up -d
 
-run:
-	cd docker && docker-compose up
+stop:
+	docker-compose -f app/docker-compose.yml down
+	docker-compose -f gateway/docker-compose.yml down
+
+restart:
+	$(MAKE) start
+	$(MAKE) stop
