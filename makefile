@@ -9,5 +9,5 @@ stop:
 	docker-compose -f gateway/docker-compose.yml down
 
 restart:
-	$(MAKE) start
-	$(MAKE) stop
+	make stop
+	make start
