@@ -1,0 +1,40 @@
+version: '3.7'
+services:
+  app:
+    image: golang:1.11
+    volumes:
+      - ./go:/go
+    working_dir: /go/src/app
+    command: go run main.go
+    restart: always
+    environment:
+      TZ: Asia/Tokyo
+      GO111MODULE: 'on'
+      PORT: 8080
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_NAME: app
+    links:
+      - db:db
+    networks:
+      - app
+
+  db:
+    image: mysql:5.7
+    volumes:
+      - ./mysql/lib:/var/lib/mysql
+      - ./mysql/log:/var/log/mysql
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/init:/docker-entrypoint-initdb.d
+    environment:
+      TZ: Asia/Tokyo
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    restart: always
+    networks:
+      - app
+
+networks:
+  app:
+    external:
+      name: app
